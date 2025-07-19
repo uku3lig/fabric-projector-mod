@@ -1,5 +1,6 @@
 package com.github.hashicraft.projector;
 
+import com.github.hashicraft.projector.config.RedirectConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +70,8 @@ public class ProjectorMod implements ModInitializer {
 
     // register the config class
     ServerConfig.Register("PROJECTOR_");
+
+    RedirectConfig.loadConfig();
   }
 
   public static Identifier identifier(String id) {

@@ -30,6 +30,7 @@ import javax.imageio.ImageIO;
 
 import com.github.hashicraft.projector.ProjectorMod;
 
+import com.github.hashicraft.projector.config.RedirectConfig;
 import io.netty.handler.timeout.TimeoutException;
 import net.jodah.failsafe.Failsafe;
 import net.jodah.failsafe.RetryPolicy;
@@ -96,6 +97,7 @@ public class FileDownloader {
 
   // Asyncronously download an image from the given URL
   public void download(String url, int cacheSeconds) {
+    url = RedirectConfig.getRedirectedUrl(url);
     synchronized (mutex) {
       PictureData data = this.cache.get(url);
       if (data == null) {
@@ -113,6 +115,7 @@ public class FileDownloader {
   // If cacheSeconds is greater than 0 the image is re-downloaded n seconds after
   // the initial download
   public PictureData getPictureDataForURL(String url, Boolean download, int cacheSeconds) {
+    url = RedirectConfig.getRedirectedUrl(url);
     synchronized (mutex) {
       // attempt to get the url from the cache
       PictureData data = this.cache.get(url);
@@ -287,7 +290,7 @@ public class FileDownloader {
 
           ProjectorMod.LOGGER.info("Downloaded url: " + location);
         } catch (Exception ex) {
-          throw new RejectedExecutionException("Unable to download file " + ex);
+          throw new RejectedExecutionException("Unable to download file", ex);
         }
       });
     });
